@@ -1,0 +1,6 @@
+{
+  "name": "ShortsLens Studio - 10s Hollywood Clean Joke Video Prompts",
+  "description": "Hollywood-style cinematic 10-second YouTube Shorts video prompt generator and studio with 50 innovative clean joke scripts, vertical framing, text overlays, and British voice narration preview.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
