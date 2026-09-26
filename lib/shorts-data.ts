@@ -124,31 +124,37 @@ export function getFullVideoGeneratorPrompt(short: ShortPrompt): string {
   return `[VIDEO & AUDIO GENERATION PROMPT - 10s VERTICAL 9:16]
 FORMAT: 9:16 Vertical (1080x1920), 10.0 seconds runtime, 30fps.
 STYLE: Hollywood cinematic, photorealistic 8k, anamorphic lens, high-contrast color grade.
+CONTINUITY & TEMPORAL STABILITY: Single unbroken continuous take (or seamless match-cut). Zero jump cuts. Strict subject persistence, uniform environmental lighting, consistent physics, and continuous motion vectors from 0.0s to 10.0s.
 
-VISUAL STORYTELLING (10-SECOND BEATS):
+UNBROKEN 10-SECOND CINEMATIC CONTINUITY:
+- 0.0s - 3.5s (SETUP & GROUNDING): Establish subject in high-detail environment. Camera establishes spatial context and visual premise smoothly.
+- 3.5s - 6.5s (ESCALATION & COMEDIC ANTICIPATION): Continuous unbroken camera motion tracking the same subject as tension escalates: ${short.visualMetaphor}.
+- 6.5s - 10.0s (PUNCHLINE CLIMAX & PHYSICAL PAYOFF): Direct causal punchline payoff in the same scene space with synchronized reaction and crisp lighting finish.
+
+VISUAL STORYTELLING (SCENE-BY-SCENE LOGICAL CONTINUITY):
 ${short.visualStorytellingPrompt}
 
-VISUAL METAPHOR:
+VISUAL METAPHOR (PHYSICAL REALIZATION):
 ${short.visualMetaphor}
 
-CAMERA CHOREOGRAPHY:
+CAMERA CHOREOGRAPHY (CONTINUOUS FLOW):
 ${short.cameraAngle}
 
 LIGHTING & ATMOSPHERE:
 ${short.lighting}
 
-CHARACTERS & STYLING:
+CHARACTERS & STYLING (CONSISTENT IDENTITY):
 ${short.characters.map((c) => `- ${c.name} (${c.role}): ${c.visualDescription}`).join("\n")}
 
-AUDIO / VOICE SPECIFICATION:
+AUDIO / VOICE SPECIFICATION (TIMED WITH VISUAL BEATS):
 Target Voice: British young female voice, expressive, dramatic comedic timing, crisp RP cadence.
 Dialogue Script:
 ${short.dialogueScript.map((d) => `[${d.timeRange}] ${d.speaker} (${d.mood}): "${d.text}"`).join("\n")}
 
-ON-SCREEN TEXT OVERLAY (UPPER SAFE ZONE 15%-45% Y):
-- 0-3s Hook: "${short.textOverlay.hookText}"
-- 3-7s Escalation: "${short.textOverlay.escalationText}"
-- 7-10s Punchline: "${short.textOverlay.punchlineText}"
+ON-SCREEN TEXT OVERLAY (UPPER SAFE ZONE 15%-45% Y - CAREFULLY TIMED):
+- 0.0s - 3.5s Hook: "${short.textOverlay.hookText}"
+- 3.5s - 6.5s Escalation: "${short.textOverlay.escalationText}"
+- 6.5s - 10.0s Punchline: "${short.textOverlay.punchlineText}"
 - Backdrop: Neutral high-contrast matte container (protects bottom 22% YouTube Shorts UI).`;
 }
 
@@ -164,7 +170,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why don't scientists trust atoms?",
       punchline: "Because they literally make up everything!"
     },
-    visualMetaphor: "In a high-tech quantum particle accelerator, lab equipment and floating clipboards dissolve into glowing neon pixels that spell out 'WE MAKE UP EVERYTHING'.",
+    visualMetaphor: "In a sleek high-tech quantum lab, a floating glowing atomic sphere duplicates in mid-air and self-assembles into a holographic clipboard spelling 'WE MAKE UP EVERYTHING'.",
     characters: [
       {
         name: "Dr. Clara Sterling",
@@ -174,12 +180,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Crisp academic cadence shifting into comedic dramatic revelation."
       }
     ],
-    cameraAngle: "0-3s: Vertical macro push-in on glowing atomic sphere. 3-7s: Dynamic Dutch tilt spinning 180°. 7-10s: Wide cinematic laboratory reveal.",
-    lighting: "Blade Runner cyber-neon lighting with electric cyan rim lights and glowing magenta particle beams.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Dr. Clara examines a floating glowing atom in a dark neon lab. 3-7s: The atom multiplies rapidly, assembling into floating coffee mugs and lab tools. 7-10s: The entire room dissolves into sparkling digital confetti as Clara raises an eyebrow. Photorealistic 8K, 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Steady 9:16 push-in on Dr. Clara examining a levitating atom. 3.5s-6.5s: Seamless unbroken glide tracking the multiplying atoms. 6.5s-10.0s: Fluid low-angle tilt locking onto Clara's knowing smile.",
+    lighting: "Blade Runner cyber-neon lighting with electric cyan rim lights and glowing magenta particle beams in a continuous atmospheric haze.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: In a futuristic quantum laboratory, Dr. Clara Sterling peers with curiosity into a glowing magnetic levitation chamber holding a luminous atomic particle. 3.5s-6.5s: In the exact same shot without cutting, the single atom rapidly multiplies, assembling in mid-air into a floating holographic clipboard and coffee mug. 6.5s-10.0s: The objects resolve into neon digital letters spelling 'WE MAKE UP EVERYTHING!' as Clara raises an eyebrow in deadpan triumph. Photorealistic 8K, seamless physics, zero jump cuts.",
     dialogueScript: [
-      { speaker: "Dr. Clara", timeRange: "0:00 - 0:04", text: "Never trust an atom in this laboratory...", mood: "Intriguing British whisper" },
-      { speaker: "Dr. Clara", timeRange: "0:04 - 0:10", text: "They literally make up everything around us!", mood: "Witty triumphant comedic delivery" }
+      { speaker: "Dr. Clara", timeRange: "0:00 - 0:03.5", text: "Never trust an atom in this laboratory...", mood: "Intriguing British whisper" },
+      { speaker: "Dr. Clara", timeRange: "0:04.5 - 0:10.0", text: "They literally make up everything around us!", mood: "Witty triumphant comedic delivery" }
     ],
     textOverlay: {
       hookText: "WHY SCIENTISTS CAN NEVER TRUST ATOMS ⚛️",
@@ -188,7 +194,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Neutral matte container, high-contrast white text, cyan border."
     },
-    generatorCopyPrompt: "Vertical 9:16 Hollywood cinematic video. 10 seconds. Female scientist in neon futuristic lab examining glowing atomic spheres. 0-3s push-in, 3-7s atoms transform into floating objects, 7-10s cinematic punchline reveal with holographic text. 8k, photorealistic, cinematic anamorphic lighting.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO JUMP CUTS, HIGH TEMPORAL STABILITY] Female scientist in sleek cybernetic lab coat in dark neon quantum laboratory examining a glowing levitating atomic sphere. 0.0s-3.5s: Smooth push-in on atom. 3.5s-6.5s: Unbroken camera motion as atom duplicates and self-assembles into glowing floating props. 6.5s-10.0s: Direct punchline payoff with holographic text and amused reaction. Consistent cyan/magenta volumetric lighting, 8k photorealistic.",
     hdImage: "",
     tags: ["SciFi", "Science", "Atoms", "Physics", "CleanJokes", "ViralComedy"]
   },
@@ -202,7 +208,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why did the scarecrow win an Academy Award?",
       punchline: "Because he was outstanding in his field!"
     },
-    visualMetaphor: "A golden wheat field transforms into a red-carpet Hollywood gala where paparazzi crows in miniature tuxedos snap camera flashes as a scarecrow accepts a golden trophy.",
+    visualMetaphor: "A stylish straw scarecrow in a black velvet bow tie standing in a golden wheat field receives a glowing Oscar trophy as a red carpet unrolls between the stalks.",
     characters: [
       {
         name: "Lady Barnaby",
@@ -212,12 +218,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Oscar ceremony announcer voice with grand theatrical flair."
       }
     ],
-    cameraAngle: "0-3s: Cinematic crane shot sweeping through golden wheat stalks. 3-7s: Rapid low-angle tracking shot along red carpet. 7-10s: Hero low-angle pedestal reveal.",
-    lighting: "Golden hour sunset with blinding camera flashbulbs and warm volumetric sunbeams.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Golden wheat field waving in the breeze. 3-7s: A red carpet unrolls between the crops as black crows wearing tuxedos flash vintage cameras. 7-10s: A stylish straw scarecrow in a silk bow tie hoists a sparkling golden award triumphantly. 10s photorealistic video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: High-angle crane shot descending through golden wheat stalks. 3.5s-6.5s: Unbroken low-angle glide along the wheat path. 6.5s-10.0s: Hero pedestal tilt revealing the scarecrow holding the trophy.",
+    lighting: "Warm golden hour sunset with rich atmospheric rim light and glittering flashbulb accents.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: In a sun-drenched golden wheat field swaying in the autumn breeze, a dapper straw scarecrow in a black silk bow tie stands proudly among the tall stalks. 3.5s-6.5s: Camera smoothly glides down along the wheat path without cutting as a velvet red carpet rolls out beneath his wooden post while friendly tuxedo crows snap vintage flash cameras. 6.5s-10.0s: In the same shot, the scarecrow hoists a gleaming golden trophy toward the setting sun with golden wheat chaff floating like confetti. 10s photorealistic video.",
     dialogueScript: [
-      { speaker: "Lady Barnaby", timeRange: "0:00 - 0:04", text: "And the Oscar for Lifetime Achievement goes to...", mood: "Grand dramatic pause" },
-      { speaker: "Lady Barnaby", timeRange: "0:04 - 0:10", text: "The Scarecrow! For being outstanding in his field!", mood: "Enthusiastic British celebration" }
+      { speaker: "Lady Barnaby", timeRange: "0:00 - 0:03.5", text: "And the Oscar for Lifetime Achievement goes to...", mood: "Grand dramatic suspense" },
+      { speaker: "Lady Barnaby", timeRange: "0:04.5 - 0:10.0", text: "The Scarecrow! For being outstanding in his field!", mood: "Enthusiastic British celebration" }
     ],
     textOverlay: {
       hookText: "THE SCARECROW'S BIG HOLLYWOOD NIGHT 🏆",
@@ -226,7 +232,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Dark charcoal backdrop, gold foil typography, clean margins."
     },
-    generatorCopyPrompt: "Vertical 9:16 Hollywood cinematic video. 10 seconds. Golden wheat field with Oscar red carpet and tuxedo-wearing crows flashing cameras. Elegant scarecrow holding a gold trophy at sunset. 35mm film grain, 8k, cinematic color grade.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, UNBROKEN TEMPORAL FLOW] Golden wheat field at sunset. 0.0s-3.5s: Descending crane shot establishing dapper scarecrow in black silk bow tie. 3.5s-6.5s: Unbroken glide along red carpet with tuxedo crows flashing camera bulbs. 6.5s-10.0s: Scarecrow hoists gold trophy as golden sunlight bursts across the lens. 35mm film grain, 8k, seamless subject persistence.",
     hdImage: "",
     tags: ["Hollywood", "Scarecrow", "Awards", "CleanHumor", "ViralShorts"]
   },
@@ -240,7 +246,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why did the titanium racing bicycle fall over?",
       punchline: "Because it was simply two-tired!"
     },
-    visualMetaphor: "A sleek carbon-fiber racing bike screeching around a high-speed Formula 1 corner dramatically pulls a velvet sleeping eye-mask over its handlebars and collapses onto a silk pillow.",
+    visualMetaphor: "A high-speed carbon-fiber racing bicycle on a wet neon track smoothly drifts to a halt, automatically deploying a tiny plush velvet pillow under its kickstand before leaning over to sleep.",
     characters: [
       {
         name: "Gemma Pit-Chief",
@@ -250,12 +256,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Fast-paced radio transmission into deadpan comedy punchline."
       }
     ],
-    cameraAngle: "0-3s: High-speed ground-level tracking shot. 3-7s: 120fps slow-motion drift. 7-10s: Dramatic top-down comedic freeze frame.",
-    lighting: "High-octane stadium floodlights reflecting off glossy wet racetrack asphalt.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: A futuristic titanium bicycle speeds down a neon racetrack with roaring engine sounds. 3-7s: Smoke billows from both tires in extreme slow motion. 7-10s: The bicycle sighs, deploys a tiny velvet pillow beneath its kickstand, and flops over peacefully. Photorealistic 8K, 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Low ground-level tracking shot matching the bicycle's forward velocity. 3.5s-6.5s: Smooth decelerating pan tracking the bike's slowing drift. 6.5s-10.0s: Centered medium hero shot as the bike rests on its pillow.",
+    lighting: "High-octane stadium floodlights reflecting off glossy wet racetrack asphalt with neon cyan/yellow rim lights.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: A sleek titanium racing bicycle speeds down a rain-slicked neon racetrack straightaway directly toward the camera. 3.5s-6.5s: Without cutting, the bike enters a controlled slow-motion deceleration drift, wisps of white tire smoke curling from both wheels. 6.5s-10.0s: In the same unbroken shot, the bicycle comes to a gentle standstill in center frame, its kickstand deploys a miniature silk pillow, and it peacefully tilts over as its headlight gives a gentle wink. Photorealistic 8K, 10s video.",
     dialogueScript: [
-      { speaker: "Gemma", timeRange: "0:00 - 0:04", text: "Telemetry alert! Why has the bike crashed on turn four?!", mood: "Frantic pit-lane headset urgency" },
-      { speaker: "Gemma", timeRange: "0:04 - 0:10", text: "Diagnostics confirmed... it was completely two-tired!", mood: "Cheeky British punchline chuckling" }
+      { speaker: "Gemma", timeRange: "0:00 - 0:03.5", text: "Telemetry alert! Why has the bike crashed on turn four?!", mood: "Frantic pit-lane headset urgency" },
+      { speaker: "Gemma", timeRange: "0:04.5 - 0:10.0", text: "Diagnostics confirmed... it was completely two-tired!", mood: "Cheeky British punchline chuckling" }
     ],
     textOverlay: {
       hookText: "DRAMATIC RACETRACK MALFUNCTION 🚴💨",
@@ -264,7 +270,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Matte carbon-fiber container, bold yellow race typography."
     },
-    generatorCopyPrompt: "Vertical 9:16 Michael Bay action cinematic video. 10 seconds. Sleek racing bicycle speeding on wet neon racetrack, extreme slow-motion tire smoke, bike gracefully falling onto a plush velvet pillow. 8K photorealistic, cinematic camera flare.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO JUMP CUTS, PERFECT MOTION CONTINUITY] Sleek carbon-fiber racing bike on wet neon racetrack under floodlights. 0.0s-3.5s: Fast ground tracking shot. 3.5s-6.5s: Unbroken deceleration drift with gentle tire smoke. 6.5s-10.0s: Bike rests on tiny velvet pillow under kickstand and leans over peacefully. 8K photorealistic, anamorphic lens flares.",
     hdImage: "",
     tags: ["Action", "Bicycle", "Racetrack", "SportsComedy", "Shorts"]
   },
@@ -278,7 +284,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "What do you call a fake noodle pretending to be authentic?",
       punchline: "An impasta!"
     },
-    visualMetaphor: "In a smoky 1940s interrogation room, a gritty detective fork tears off a fake string mustache from a disguised plastic noodle sitting under an interrogation lamp.",
+    visualMetaphor: "In a shadowy 1940s interrogation room, a silver detective fork under a swinging tungsten lamp gently pulls off a glued-on string mustache from a disguised noodle to reveal a yellow rubber imposter.",
     characters: [
       {
         name: "Detective Miller",
@@ -288,12 +294,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Low atmospheric noir voiceover with sharp punchline delivery."
       }
     ],
-    cameraAngle: "0-3s: Moody shadow-drenched side profile. 3-7s: Dramatic overhead table zoom. 7-10s: Extreme close-up on peeling mustache.",
-    lighting: "Chiaroscuro high-contrast noir lighting with single tungsten swinging pendant lamp.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: A dark police interrogation room filled with cigarette smoke. 3-7s: A golden bowl of fettuccine sits under a harsh spotlight wearing sunglasses. 7-10s: A silver fork unmasks the noodle, revealing a plastic toy imposter. Film noir aesthetic, 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Atmospheric medium shot pushing past Detective Miller's trench coat silhouette toward the table. 3.5s-6.5s: Continuous macro zoom on the single noodle in the spotlight. 6.5s-10.0s: Tight focus on the fork unmasking the mustache.",
+    lighting: "Chiaroscuro high-contrast noir lighting with single tungsten swinging pendant lamp casting dramatic venetian blind shadows.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: Inside a dark, smoke-swirling 1940s police interrogation room, Detective Miller leans over a wooden table illuminated by a single swinging tungsten lamp. 3.5s-6.5s: Camera smoothly pushes in on a lone fettuccine noodle sitting upright in the suspect chair wearing miniature black sunglasses and a fake yarn mustache. 6.5s-10.0s: In the same unbroken shot, a polished silver fork reaches into frame and lifts off the mustache, exposing a bright yellow plastic toy noodle underneath. 10s film noir video.",
     dialogueScript: [
-      { speaker: "Detective Miller", timeRange: "0:00 - 0:04", text: "We've had our eye on this noodle for three weeks...", mood: "Gritty noir whisper" },
-      { speaker: "Detective Miller", timeRange: "0:04 - 0:10", text: "He wasn't authentic Italian at all. An absolute impasta!", mood: "Dry British punchline revelation" }
+      { speaker: "Detective Miller", timeRange: "0:00 - 0:03.5", text: "We've had our eye on this suspect for three weeks...", mood: "Gritty noir whisper" },
+      { speaker: "Detective Miller", timeRange: "0:04.5 - 0:10.0", text: "He wasn't authentic Italian at all. An absolute impasta!", mood: "Dry British punchline revelation" }
     ],
     textOverlay: {
       hookText: "THE POLICE LINEUP INTERROGATION 🍝🕵️",
@@ -302,7 +308,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Dark noir matte backing, bold white typewriter font."
     },
-    generatorCopyPrompt: "Vertical 9:16 classic film noir cinema. 10 seconds. 1940s police interrogation room, tungsten swinging lamp. Silver fork pulling fake mustache off a plastic noodle imposter in a bowl. 8k, high contrast black-and-amber grading.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, HIGH SHADOW CONTINUITY] 1940s moody interrogation room with swinging tungsten lamp. 0.0s-3.5s: Camera pushes past detective silhouette. 3.5s-6.5s: Unbroken macro glide onto noodle in sunglasses and fake mustache. 6.5s-10.0s: Silver fork unmasks mustache revealing rubber noodle. 8k photorealistic, rich amber and charcoal palette.",
     hdImage: "",
     tags: ["FilmNoir", "Pasta", "Detective", "FoodComedy", "CleanHumor"]
   },
@@ -316,7 +322,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why do bees always have sticky, glossy hair?",
       punchline: "Because they only use honeycombs!"
     },
-    visualMetaphor: "A bustling miniature Beverly Hills hair salon inside a hollow oak tree where honeybee stylists blow-dry fluffy golden fuzz using combs dripping with glowing golden honey.",
+    visualMetaphor: "Inside a glowing golden oak tree hive, Queen Beatrice gently brushes a fluffy bumblebee's fuzzy crown with a golden honeycomb brush, styling it into a sparkling voluminous royal bouffant.",
     characters: [
       {
         name: "Queen Beatrice",
@@ -326,12 +332,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Vibrant high-fashion British accent with infectious charm."
       }
     ],
-    cameraAngle: "0-3s: Macro dolly through oak tree bark. 3-7s: 360° orbital spin around salon chair. 7-10s: Glamour wind-machine hero shot.",
-    lighting: "Golden amber backlight with sparkling honey droplets reflecting radiant warm sunshine.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Camera enters a glowing luxury salon built from golden wax. 3-7s: Bees with fabulous voluminous hair spin in salon chairs. 7-10s: Stylist pulls out a golden honeycomb brush, styling fluffy bumblebee fuzz to perfection. 10s photorealistic macro video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Macro tracking glide entering the warm honeycomb salon. 3.5s-6.5s: Smooth 180° semi-orbital rotation around the salon chair. 6.5s-10.0s: Glamour push-in on the bee's sparkling styled hair.",
+    lighting: "Radiant golden amber sunlight filtering through translucent wax walls with shimmering honey droplet highlights.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: Camera smoothly enters a glowing luxury salon sculpted from golden honeycomb inside an ancient oak tree. 3.5s-6.5s: Without cutting, camera orbits around a chic miniature salon chair where a fluffy bumblebee sits holding a fashion magazine. 6.5s-10.0s: Queen Beatrice lifts a radiant golden honeycomb comb dripping with liquid light, gently styling the bee's fuzz into a magnificent, glossy bouffant that sparkles under the sun. 10s photorealistic macro video.",
     dialogueScript: [
-      { speaker: "Queen Beatrice", timeRange: "0:00 - 0:04", text: "Darling, how does every bee in London keep such fabulous volume?", mood: "Posh British salon flair" },
-      { speaker: "Queen Beatrice", timeRange: "0:04 - 0:10", text: "Simple, sweetie! We always brush with honeycombs!", mood: "Sparkling sassy British delivery" }
+      { speaker: "Queen Beatrice", timeRange: "0:00 - 0:03.5", text: "Darling, how does every bee in London keep such fabulous volume?", mood: "Posh British salon flair" },
+      { speaker: "Queen Beatrice", timeRange: "0:04.5 - 0:10.0", text: "Simple, sweetie! We always brush with honeycombs!", mood: "Sparkling sassy British delivery" }
     ],
     textOverlay: {
       hookText: "THE SECRET TO PERFECT BEE HAIR 🐝✨",
@@ -340,7 +346,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Warm honey-tinted matte container, glossy gold text."
     },
-    generatorCopyPrompt: "Vertical 9:16 whimsical cinematic video. 10 seconds. Macro luxury bee salon inside glowing golden beehive. Cute bumblebees with fluffy styled hair, golden honeycombs used as hairbrushes, sparkling warm light, 8k resolution.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, CONSISTENT MACRO DEPTH] Macro golden honeycomb salon inside sunlit tree. 0.0s-3.5s: Glide into salon. 3.5s-6.5s: Unbroken orbital rotation around fluffy bee in salon chair. 6.5s-10.0s: Honeycomb comb styles bee's fur into sparkling glossy bouffant. 8K photorealistic, warm volumetric light beams.",
     hdImage: "",
     tags: ["Bees", "Nature", "Salon", "CuteAnimals", "FamilyComedy"]
   },
@@ -354,7 +360,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why did the giant heirloom tomato turn bright red?",
       punchline: "Because it saw the salad dressing!"
     },
-    visualMetaphor: "A high-fashion Paris runway where a bottle of Italian vinaigrette in a silk dressing gown struts down the catwalk, causing a green tomato in the front row to blush glowing crimson red.",
+    visualMetaphor: "On a high-fashion culinary runway, an elegant vinaigrette bottle in a silk robe struts down the catwalk, causing a front-row green heirloom tomato to blush glowing crimson red with a puff of steam.",
     characters: [
       {
         name: "Chef Vivienne",
@@ -364,12 +370,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Elegant runway commentary with delightful comedic gasp."
       }
     ],
-    cameraAngle: "0-3s: Runway tracking shot pushing down the catwalk. 3-7s: Quick cut to tomato in audience. 7-10s: Dramatic crimson glow bloom effect.",
-    lighting: "High-fashion strobe lights and sparkling crystal chandeliers over a mirrored runway.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: A glittering runway where lettuce and cucumbers applaud. 3-7s: An Italian salad dressing bottle glides down wearing a silk robe. 7-10s: A green tomato in the VIP row gasps and turns glowing bright crimson red with steam puffing from its stem. 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Catwalk tracking shot following the dressing bottle down the mirrored runway. 3.5s-6.5s: Seamless unbroken whip-pan to the VIP front row. 6.5s-10.0s: Tight push-in on the tomato blushing red.",
+    lighting: "High-fashion crystal chandeliers and rhythmic camera flash strobes illuminating a mirrored runway floor.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: On a glittering Paris culinary runway, an Italian salad dressing bottle wearing a tailored silk dressing gown struts confidently down the mirrored catwalk. 3.5s-6.5s: Camera smoothly pans across the clapping cucumber audience without cutting, focusing on a plump green heirloom tomato in the VIP seat. 6.5s-10.0s: In the same shot, the green tomato's eyes widen, its cheeks glow with a smooth gradient of bright ruby red, and a tiny puff of comedic steam vents from its leafy stem. 10s photorealistic video.",
     dialogueScript: [
-      { speaker: "Chef Vivienne", timeRange: "0:00 - 0:04", text: "Look at the front row! Why has that green tomato turned so scarlet?", mood: "Curious high-fashion whisper" },
-      { speaker: "Chef Vivienne", timeRange: "0:04 - 0:10", text: "Because it just caught the salad dressing!", mood: "Witty laughing British punchline" }
+      { speaker: "Chef Vivienne", timeRange: "0:00 - 0:03.5", text: "Look at the front row! Why has that green tomato turned so scarlet?", mood: "Curious high-fashion whisper" },
+      { speaker: "Chef Vivienne", timeRange: "0:04.5 - 0:10.0", text: "Because it just caught the salad dressing!", mood: "Witty laughing British punchline" }
     ],
     textOverlay: {
       hookText: "THE MOST EMBARRASSED VEGETABLE EVER 🍅👗",
@@ -378,7 +384,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Dark charcoal backdrop, ruby red accent trim."
     },
-    generatorCopyPrompt: "Vertical 9:16 high fashion culinary video. 10 seconds. Paris runway with vegetables in the audience, vinaigrette bottle walking catwalk, green tomato blushing bright red with steam. 8k photorealistic, cinematic studio lighting.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, SEAMLESS PAN CONTINUITY] High-fashion mirrored runway with culinary audience. 0.0s-3.5s: Dressing bottle walks catwalk in silk robe. 3.5s-6.5s: Unbroken pan to front-row green heirloom tomato. 6.5s-10.0s: Green tomato smoothly blushes glowing crimson red with cute steam puff. 8k photorealistic, cinematic lighting.",
     hdImage: "",
     tags: ["Food", "Fashion", "Cooking", "CleanJokes", "Viral"]
   },
@@ -392,7 +398,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "What do you call a sleeping Tyrannosaurus Rex in the jungle?",
       punchline: "A dino-snore!"
     },
-    visualMetaphor: "A colossal T-Rex wearing a gigantic polka-dot nightcap snuggled under a canopy of giant ferns, blowing enormous floating dream bubbles that vibrate the Jurassic earth.",
+    visualMetaphor: "In a prehistoric moonlit clearing, a massive friendly T-Rex in a blue polka-dot nightcap snuggled on giant ferns snores enormous glowing iridescent bubbles that gently float toward the canopy.",
     characters: [
       {
         name: "Dr. Evelyn Drake",
@@ -402,12 +408,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Tense jungle whisper breaking into joyful warm giggle."
       }
     ],
-    cameraAngle: "0-3s: Jungle foliage wipe into deep prehistoric clearing. 3-7s: Ground-shaking rumble zoom. 7-10s: Wide comedic reveal of giant nightcap.",
-    lighting: "Misty Jurassic moonlight with bioluminescent fireflies illuminating prehistoric mist.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Explorer peeks through massive prehistoric jungle leaves. 3-7s: The earth shakes with heavy resonant snores. 7-10s: Camera reveals a friendly massive T-Rex sleeping peacefully with a nightcap and teddy bear, snoring floating bubbles. 10s photorealistic video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Slow creeping push-in past giant prehistoric palm fronds into the clearing. 3.5s-6.5s: Unbroken low-angle tilt tracking the sleeping dinosaur's rising chest. 6.5s-10.0s: Upward tilt following a glowing floating snore bubble.",
+    lighting: "Misty Jurassic moonlight with bioluminescent fireflies and glowing cyan jungle moss.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: In a prehistoric jungle clearing illuminated by blue moonlight, camera gently glides past giant fern leaves to reveal a colossal T-Rex sleeping peacefully on a bed of moss wearing a polka-dot nightcap. 3.5s-6.5s: In the same continuous shot, the T-Rex's chest rises deeply as the ground trembles with a gentle resonant snore. 6.5s-10.0s: A giant shimmering iridescent dream bubble emerges from the dinosaur's snout, floating upward and softly popping into sparkling firefly dust. 10s photorealistic video.",
     dialogueScript: [
-      { speaker: "Dr. Evelyn", timeRange: "0:00 - 0:04", text: "Careful now... what do you call a ten-ton prehistoric beast sound asleep?", mood: "Hushed suspenseful documentary tone" },
-      { speaker: "Dr. Evelyn", timeRange: "0:04 - 0:10", text: "A dino-snore, of course!", mood: "Delighted cheerful British whisper" }
+      { speaker: "Dr. Evelyn", timeRange: "0:00 - 0:03.5", text: "Careful now... what do you call a ten-ton prehistoric beast sound asleep?", mood: "Hushed suspenseful documentary tone" },
+      { speaker: "Dr. Evelyn", timeRange: "0:04.5 - 0:10.0", text: "A dino-snore, of course!", mood: "Delighted cheerful British whisper" }
     ],
     textOverlay: {
       hookText: "SURVIVING A SLEEPING JURASSIC MONSTER 🦖💤",
@@ -416,7 +422,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Deep jungle green container, bold amber typography."
     },
-    generatorCopyPrompt: "Vertical 9:16 Jurassic cinematic video. 10 seconds. Misty prehistoric jungle at night, giant photorealistic T-Rex sleeping with a nightcap, floating glowing bubbles, camera push-in through ferns. 8k, cinematic movie grade.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, UNBROKEN ATMOSPHERIC FLOW] Misty Jurassic jungle at night. 0.0s-3.5s: Camera pushes past fern fronds into moonlit clearing. 3.5s-6.5s: Unbroken view of giant friendly T-Rex in nightcap sleeping peacefully. 6.5s-10.0s: Iridescent glowing snore bubble floats upward and pops into glowing sparkles. 8k photorealistic, bioluminescent lighting.",
     hdImage: "",
     tags: ["Dinosaurs", "Jurassic", "KidsComedy", "Adventure", "Shorts"]
   },
@@ -430,7 +436,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why was the chocolate chip cookie rushed to the emergency room?",
       punchline: "Because it was feeling so crummy!"
     },
-    visualMetaphor: "An intense Grey's Anatomy style hospital hallway where doctors push a giant chocolate chip cookie on a gurney while a tiny biscuit nurse hooks up a glass pitcher of cold milk as an IV drip.",
+    visualMetaphor: "In a fast-paced medical drama hallway, Surgeon Sarah rushes alongside a gurney carrying a warm chocolate chip cookie connected to a cold glass milk IV drip as crumbs scatter gently on the sheet.",
     characters: [
       {
         name: "Surgeon Sarah",
@@ -440,12 +446,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Rapid medical jargon cadence shifting into warm punchline."
       }
     ],
-    cameraAngle: "0-3s: Rapid tracking shot running down hospital corridor. 3-7s: Low-angle gurney push. 7-10s: Close-up on heart monitor showing chocolate chip pulses.",
-    lighting: "Sterile cool hospital fluorescent lights with warm emergency flashing strobes.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Doctors rush down a bright hospital corridor pushing a gurney. 3-7s: On the gurney is a warm golden chocolate chip cookie with a thermometer. 7-10s: Doctor checks the chart and declares the cookie is just feeling crummy, administering a glass of cold milk. 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Rapid backward tracking shot matching the rushing gurney's speed. 3.5s-6.5s: Continuous smooth drop to gurney eye-level. 6.5s-10.0s: Close-up on heart monitor displaying chocolate chip pulses.",
+    lighting: "Clean hospital fluorescent lighting with pulsing amber emergency beacon highlights along the polished floor.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: Surgeon Sarah and a medical team sprint backward down a bright hospital corridor pushing a stainless steel gurney. 3.5s-6.5s: Camera smoothly lowers without cutting to reveal a giant golden chocolate chip cookie on the gurney with a tiny thermometer and a glass pitcher of ice-cold milk as an IV drip. 6.5s-10.0s: Sarah checks the chart, smiling warmly as a digital monitor beeps with cookie chip waveforms and the cookie sighs in relief. 10s photorealistic video.",
     dialogueScript: [
-      { speaker: "Surgeon Sarah", timeRange: "0:00 - 0:04", text: "Clear the hallway! What's the patient's condition?!", mood: "High-octane ER panic" },
-      { speaker: "Surgeon Sarah", timeRange: "0:04 - 0:10", text: "Doctor, he's losing chips! He's feeling completely crummy!", mood: "Dramatic British medical punchline" }
+      { speaker: "Surgeon Sarah", timeRange: "0:00 - 0:03.5", text: "Clear the hallway! What's the patient's condition?!", mood: "High-octane ER panic" },
+      { speaker: "Surgeon Sarah", timeRange: "0:04.5 - 0:10.0", text: "Doctor, he's losing chips! He's feeling completely crummy!", mood: "Dramatic British medical punchline" }
     ],
     textOverlay: {
       hookText: "CODE RED IN THE BAKERY EMERGENCY ROOM 🍪🚨",
@@ -454,7 +460,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Clean sterile white matte, emergency red border."
     },
-    generatorCopyPrompt: "Vertical 9:16 hospital drama cinematic video. 10 seconds. Fast-paced medical hallway, doctors pushing a giant chocolate chip cookie on a gurney, milk IV drip, heart monitor with cookie chips. 8k, cinematic anamorphic lenses.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, UNBROKEN MOTION TRACKING] Hospital hallway ER rush. 0.0s-3.5s: Fast backward tracking shot as doctors push gurney. 3.5s-6.5s: Unbroken glide showing golden chocolate chip cookie on gurney with milk IV drip. 6.5s-10.0s: Cookie smiles as monitor beeps cookie waveforms. 8k photorealistic, anamorphic medical lighting.",
     hdImage: "",
     tags: ["Medical", "Baking", "Cookies", "CleanHumor", "ViralVideo"]
   },
@@ -468,7 +474,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "What do you call a plate of melted cheddar cheese that doesn't belong to you?",
       punchline: "Nacho cheese!"
     },
-    visualMetaphor: "A dusty 1880s Wild West saloon showdown where a cowboy tortilla chip in a leather Stetson draws twin salsa pistols to guard a bubbling pot of melted cheese.",
+    visualMetaphor: "In a sunlit dusty 1880s Wild West saloon, a seasoned tortilla chip in a silver sheriff badge draws twin salsa revolvers to guard a bubbling skillet of melted cheddar from rival crackers.",
     characters: [
       {
         name: "Sheriff Clementine",
@@ -478,12 +484,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Ennio Morricone spaghetti western grit into triumphant laugh."
       }
     ],
-    cameraAngle: "0-3s: Extreme close-up on squinting eyes. 3-7s: Low-angle holster camera move. 7-10s: Wide saloon bar standoff.",
-    lighting: "Harsh dusty high-noon desert sunlight through wooden saloon slatted blinds.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: Tumbleweeds roll through a dusty Western saloon. 3-7s: A tortilla chip wearing a sheriff badge stares down rival crackers. 7-10s: The chip slams his hand on the melted cheddar skillet shouting 'That's nacho cheese!'. 10s cinematic video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Low-angle dolly push past wooden saloon swinging doors toward the bar. 3.5s-6.5s: Unbroken push-in on the cast-iron skillet. 6.5s-10.0s: Close-up hero shot of the tortilla chip staring down rivals.",
+    lighting: "Harsh dusty high-noon desert sunlight streaming through wooden saloon slatted blinds creating strong golden contrast.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: Dust motes dance in sunbeams inside an 1880s Western saloon as camera glides past wooden tables toward the bar. 3.5s-6.5s: Without cutting, camera moves in on a sizzling skillet of golden melted cheddar where a crispy tortilla chip wearing a silver sheriff star stands firm. 6.5s-10.0s: In the same shot, the tortilla chip draws two miniature salsa squeeze-bottle revolvers and shakes his head with a wide grin, guarding his cheese triumphantly. 10s cinematic video.",
     dialogueScript: [
-      { speaker: "Sheriff Clementine", timeRange: "0:00 - 0:04", text: "Keep your hands off that skillet, stranger...", mood: "Low gritty Western threat" },
-      { speaker: "Sheriff Clementine", timeRange: "0:04 - 0:10", text: "Because this platter is NACHO cheese!", mood: "Booming triumphant punchline" }
+      { speaker: "Sheriff Clementine", timeRange: "0:00 - 0:03.5", text: "Keep your hands off that skillet, stranger...", mood: "Low gritty Western threat" },
+      { speaker: "Sheriff Clementine", timeRange: "0:04.5 - 0:10.0", text: "Because this platter is NACHO cheese!", mood: "Booming triumphant punchline" }
     ],
     textOverlay: {
       hookText: "HIGH NOON AT THE CHIP SALOON 🧀🤠",
@@ -492,7 +498,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Rustic desert leather backdrop, bold gold Western font."
     },
-    generatorCopyPrompt: "Vertical 9:16 Spaghetti Western cinema. 10 seconds. Dusty saloon, cowboy tortilla chip with badge and dual revolvers guarding sizzling skillet of cheddar cheese, intense close-ups, 8k film grain.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, HIGH SHADOW CONTINUITY] Dusty 1880s Wild West saloon with golden sunbeams. 0.0s-3.5s: Glide past swinging doors to bar. 3.5s-6.5s: Unbroken push to bubbling skillet of melted cheddar. 6.5s-10.0s: Tortilla chip with sheriff badge draws dual mini salsa guns guarding the skillet. 8k photorealistic, Spaghetti Western color grade.",
     hdImage: "",
     tags: ["Western", "Nachos", "Cheese", "Cowboys", "FoodComedy"]
   },
@@ -506,7 +512,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       setup: "Why do seagulls only fly over the open sea?",
       punchline: "Because if they flew over the bay, they'd be bagels!"
     },
-    visualMetaphor: "A majestic Top Gun fighter jet flight squadron of seagulls soaring over breaking ocean waves, suddenly banking away from San Francisco Bay as giant sesame seed bagels hover in the clouds.",
+    visualMetaphor: "A Top Gun style flight formation of seagulls soaring above turquoise ocean breakers executes a synchronized banking turn as a holographic radar map warns of the bay area ahead with floating giant bagels.",
     characters: [
       {
         name: "Flight Commander Piper",
@@ -516,12 +522,12 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
         vocalPerformanceNotes: "Radio-filtered cockpit urgency into hilarious tactical punchline."
       }
     ],
-    cameraAngle: "0-3s: Cockpit first-person POV soaring above waves. 3-7s: Barrel-roll dynamic horizon tilt. 7-10s: Wide aerial sunset fly-by.",
-    lighting: "Glistening ocean sunset with radiant orange and turquoise horizon reflections.",
-    visualStorytellingPrompt: "Vertical 9:16 cinema frame. 0-3s: A flock of seagulls flies in precision V-formation like fighter jets over sparkling ocean waters. 3-7s: The radar screen alerts 'ENTERING BAY AREA'. 7-10s: The birds veer hard right to avoid transforming into toasted sesame bagels floating in the sky. 10s video.",
+    cameraAngle: "[CONTINUOUS 10S TAKE] 0.0s-3.5s: Air-to-air tracking shot alongside the lead seagull in V-formation. 3.5s-6.5s: Unbroken wide orbital sweep revealing the coastline ahead. 6.5s-10.0s: Dynamic synchronized banking turn back toward open water.",
+    lighting: "Radiant golden hour ocean sunset with glittering water reflections and warm orange horizon rim lights.",
+    visualStorytellingPrompt: "[UNBROKEN 10-SECOND SINGLE TAKE] 0.0s-3.5s: Camera flies in tight formation alongside a majestic flock of seagulls soaring in precision V-formation above glittering turquoise ocean breakers. 3.5s-6.5s: In the same continuous aerial shot, the coastline and bay appear on the horizon where whimsical giant sesame bagels hover harmlessly in the clouds. 6.5s-10.0s: The lead seagull tilts its wings, leading the entire flock in a synchronized, razor-sharp banking turn back out to the safety of the open sea. 10s photorealistic aviation video.",
     dialogueScript: [
-      { speaker: "Flight Commander Piper", timeRange: "0:00 - 0:04", text: "Squadron alert! Why do we never fly over the bay?", mood: "Crisp tactical flight radio" },
-      { speaker: "Flight Commander Piper", timeRange: "0:04 - 0:10", text: "Because if we did, we'd all turn into bagels!", mood: "Laughing British aviation punchline" }
+      { speaker: "Flight Commander Piper", timeRange: "0:00 - 0:03.5", text: "Squadron alert! Why do we never fly over the bay?", mood: "Crisp tactical flight radio" },
+      { speaker: "Flight Commander Piper", timeRange: "0:04.5 - 0:10.0", text: "Because if we did, we'd all turn into bagels!", mood: "Laughing British aviation punchline" }
     ],
     textOverlay: {
       hookText: "TOP SECRET SEAGULL FLIGHT PROTOCOL 🌊🦅",
@@ -530,7 +536,7 @@ export const SHORTS_DATABASE: ShortPrompt[] = [
       safeZonePosition: "Upper safe zone (15% to 45% Y)",
       styleGuide: "Deep navy ocean container, bright sky-blue typography."
     },
-    generatorCopyPrompt: "Vertical 9:16 Top Gun aviation cinematic video. 10 seconds. Seagulls flying like fighter jets over sparkling ocean sunset, radar map, avoiding giant floating golden bagels in clouds, 8k photorealistic.",
+    generatorCopyPrompt: "[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO CUTS, SEAMLESS AERIAL CONTINUITY] Sunset ocean flight. 0.0s-3.5s: Air-to-air tracking shot of seagulls in V-formation over waves. 3.5s-6.5s: Unbroken glide as bay and giant floating bagels appear in sky. 6.5s-10.0s: Synchronized banking turn back toward open sea. 8k photorealistic, Top Gun cinematography.",
     hdImage: "",
     tags: ["Ocean", "Seagulls", "Aviation", "Bagels", "CleanJokes"]
   }
@@ -1137,7 +1143,7 @@ const EXTENDED_JOKES_LIST: JokeTemplate[] = [
   }
 ];
 
-// Append Prompts 11 to 75
+// Append Prompts 11 to 75 with strict 10s temporal continuity & single-take choreography
 EXTENDED_JOKES_LIST.forEach((tmpl, idx) => {
   const shortId = 11 + idx;
   SHORTS_DATABASE.push({
@@ -1155,17 +1161,17 @@ EXTENDED_JOKES_LIST.forEach((tmpl, idx) => {
       {
         name: `Lead Character (${tmpl.title})`,
         role: "Hero Protagonist",
-        visualDescription: `Distinctive, visually stylized cinematic character in high-end ${tmpl.category.toLowerCase()} aesthetic.`,
+        visualDescription: `Distinctive, visually stylized cinematic character in high-end ${tmpl.category.toLowerCase()} aesthetic with consistent wardrobe and expressive facial features.`,
         voiceMood: "British young female voice, crisp, witty, playfully dramatic and expressively timed",
         vocalPerformanceNotes: "Lively British cadence with crisp punchline comedic timing."
       }
     ],
-    cameraAngle: "0-3s: Dynamic vertical push-in. 3-7s: High-speed slow-motion tracking shot. 7-10s: Epic low-angle punchline reveal.",
-    lighting: "Hollywood anamorphic cinematic lighting with rich color contrast and volumetric rim highlights.",
-    visualStorytellingPrompt: `Vertical 9:16 cinematic YouTube Short. 0-3s: Setup establishing ${tmpl.title} with atmospheric depth. 3-7s: Visual escalation: ${tmpl.metaphor}. 7-10s: Dramatic visual punchline climax with vibrant high-contrast lighting. Photorealistic 8K, 10s video.`,
+    cameraAngle: `[CONTINUOUS 10S TAKE] 0.0s-3.5s: Smooth 9:16 vertical push-in establishing ${tmpl.title} in unbroken spatial context. 3.5s-6.5s: Seamless tracking motion following the visual escalation. 6.5s-10.0s: Fluid low-angle tilt locking onto the punchline payoff.`,
+    lighting: `Hollywood ${tmpl.category.toLowerCase()} cinematic lighting with rich color contrast, volumetric atmosphere, and uniform key highlights throughout all 10 seconds.`,
+    visualStorytellingPrompt: `[UNBROKEN 10-SECOND SINGLE TAKE - 9:16 VERTICAL] 0.0s-3.5s: Establish the scene in continuous medium framing with ${tmpl.title} grounded in its physical setting. 3.5s-6.5s: In the exact same continuous take without scene cuts, ${tmpl.metaphor}. 6.5s-10.0s: In the same unbroken scene space, the physical punchline resolves with crisp visual timing, synchronized character reaction, and radiant lighting finish. Photorealistic 8K render, 100% subject persistence, zero jump cuts.`,
     dialogueScript: [
-      { speaker: "Narrator", timeRange: "0:00 - 0:04", text: tmpl.setup, mood: "Engaging witty British setup" },
-      { speaker: "Narrator", timeRange: "0:04 - 0:10", text: tmpl.punchline, mood: "Lively expressive British punchline" }
+      { speaker: "Narrator", timeRange: "0:00 - 0:03.5", text: tmpl.setup, mood: "Engaging witty British setup" },
+      { speaker: "Narrator", timeRange: "0:04.5 - 0:10.0", text: tmpl.punchline, mood: "Lively expressive British punchline" }
     ],
     textOverlay: {
       hookText: tmpl.hook,
@@ -1174,7 +1180,7 @@ EXTENDED_JOKES_LIST.forEach((tmpl, idx) => {
       safeZonePosition: "Upper safe zone (Y: 15% to 45% margin, avoiding bottom YouTube Shorts caption area)",
       styleGuide: "High-contrast matte backdrop, crystal clear sans-serif typography, vibrant accent trim."
     },
-    generatorCopyPrompt: `Vertical 9:16 Hollywood cinematic video. 10 seconds. ${tmpl.title}. Camera moves dynamically in 10s runtime. ${tmpl.metaphor}. Masterful lighting, rich atmospheric textures, hyper-detailed render for Runway Gen-3 / Sora / Kling / Luma.`,
+    generatorCopyPrompt: `[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO JUMP CUTS, HIGH TEMPORAL STABILITY] Establishing ${tmpl.title} in rich ${tmpl.category} cinematography. 0.0s-3.5s: Character grounded in setting with setup dialogue. 3.5s-6.5s: Smooth unbroken tracking movement as ${tmpl.metaphor}. 6.5s-10.0s: Direct physical comedic punchline payoff with consistent character identity, uniform lighting, and sharp focus. Masterful 8K photorealistic render for Runway Gen-3 / Sora / Kling / Luma.`,
     hdImage: "",
     tags: tmpl.tags
   });

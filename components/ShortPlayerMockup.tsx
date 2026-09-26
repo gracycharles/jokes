@@ -3,6 +3,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ShortPrompt } from "@/lib/shorts-data";
 import {
+  playTimedShortAudio,
+  stopNarration,
+  analyzeShortAudioTiming
+} from "@/lib/audio-voice";
+import {
   Play,
   Pause,
   RotateCcw,
@@ -17,7 +22,9 @@ import {
   AlertTriangle,
   FileText,
   Sliders,
-  ChevronRight
+  ChevronRight,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 
 interface ShortPlayerMockupProps {
@@ -30,15 +37,35 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
   const [currentTime, setCurrentTime] = useState(0); // 0 to 10 seconds
   const [showSafeZones, setShowSafeZones] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<"visual" | "camera" | "dialogue">("visual");
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
+  const [isAudioSpeaking, setIsAudioSpeaking] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Stop timer on unmount
+  const audioTiming = analyzeShortAudioTiming(
+    short.cleanJokeCore.setup,
+    short.cleanJokeCore.punchline
+  );
+
+  const startVoiceAudio = () => {
+    if (!isVoiceEnabled) return;
+    setIsAudioSpeaking(true);
+    playTimedShortAudio(
+      short.cleanJokeCore.setup,
+      short.cleanJokeCore.punchline,
+      {
+        onEnd: () => setIsAudioSpeaking(false),
+        onError: () => setIsAudioSpeaking(false)
+      }
+    );
+  };
+
+  // Stop timer and audio on unmount or when short changes
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      stopNarration();
     };
-  }, []);
+  }, [short.id]);
 
   // Handle 10-second playback loop for scrubbing/animating the prompt timeline
   useEffect(() => {
@@ -47,6 +74,9 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
       timerRef.current = setInterval(() => {
         setCurrentTime((prev) => {
           if (prev >= 10) {
+            setIsPlaying(false);
+            setIsAudioSpeaking(false);
+            stopNarration();
             return 0;
           }
           return Math.min(10, +(prev + 0.1).toFixed(1));
@@ -62,12 +92,34 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
   }, [isPlaying]);
 
   const togglePlay = () => {
-    setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      if (currentTime >= 9.8 || currentTime === 0) {
+        setCurrentTime(0);
+        startVoiceAudio();
+      }
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+      setIsAudioSpeaking(false);
+      stopNarration();
+    }
   };
 
   const handleRestart = () => {
+    stopNarration();
     setCurrentTime(0);
     setIsPlaying(true);
+    startVoiceAudio();
+  };
+
+  const toggleVoice = () => {
+    if (isVoiceEnabled) {
+      stopNarration();
+      setIsAudioSpeaking(false);
+      setIsVoiceEnabled(false);
+    } else {
+      setIsVoiceEnabled(true);
+    }
   };
 
   const copyMasterPrompt = () => {
@@ -78,11 +130,11 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
 
   // Determine current active text overlay based on 10s timeline
   const activeOverlay =
-    currentTime < 3.2
-      ? { text: short.textOverlay.hookText, tag: "0-3s HOOK BEAT", beat: 1 }
-      : currentTime < 6.8
-      ? { text: short.textOverlay.escalationText, tag: "3-7s ESCALATION BEAT", beat: 2 }
-      : { text: short.textOverlay.punchlineText, tag: "7-10s PUNCHLINE BEAT", beat: 3 };
+    currentTime < 3.5
+      ? { text: short.textOverlay.hookText, tag: "0-3.5s SETUP & HOOK", beat: 1 }
+      : currentTime < 6.5
+      ? { text: short.textOverlay.escalationText, tag: "3.5-6.5s ESCALATION", beat: 2 }
+      : { text: short.textOverlay.punchlineText, tag: "6.5-10.0s PUNCHLINE CLIMAX", beat: 3 };
 
   // Current active dialogue line based on time
   const currentDialogue = short.dialogueScript.find((d) => {
@@ -244,7 +296,7 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
               {currentTime.toFixed(1)}s / 10.0s
             </span>
             <span className="text-[10px] font-mono text-neutral-400 uppercase font-bold tracking-wider">
-              {currentTime < 3.2 ? "Beat 1: Hook" : currentTime < 6.8 ? "Beat 2: Escalation" : "Beat 3: Climax"}
+              {currentTime < 3.5 ? "Beat 1: Setup" : currentTime < 6.5 ? "Beat 2: Escalation" : "Beat 3: Climax Payoff"}
             </span>
           </div>
 
@@ -264,43 +316,64 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
             <button
               onClick={() => setCurrentTime(1.5)}
               className={`py-1 text-[9px] font-mono rounded font-bold transition-colors ${
-                currentTime < 3.2
+                currentTime < 3.5
                   ? "bg-red-600 text-white"
                   : "bg-neutral-800 text-neutral-400 hover:text-white"
               }`}
             >
-              0-3s HOOK
+              0-3.5s SETUP
             </button>
             <button
               onClick={() => setCurrentTime(5.0)}
               className={`py-1 text-[9px] font-mono rounded font-bold transition-colors ${
-                currentTime >= 3.2 && currentTime < 6.8
+                currentTime >= 3.5 && currentTime < 6.5
                   ? "bg-purple-600 text-white"
                   : "bg-neutral-800 text-neutral-400 hover:text-white"
               }`}
             >
-              3-7s ESCALATION
+              3.5-6.5s ESCALATE
             </button>
             <button
               onClick={() => setCurrentTime(8.5)}
               className={`py-1 text-[9px] font-mono rounded font-bold transition-colors ${
-                currentTime >= 6.8
+                currentTime >= 6.5
                   ? "bg-amber-600 text-white"
                   : "bg-neutral-800 text-neutral-400 hover:text-white"
               }`}
             >
-              7-10s PUNCHLINE
+              6.5-10s PAYOFF
             </button>
           </div>
 
-          {/* Controls: Play/Pause & Reset */}
-          <div className="flex items-center justify-between pt-1">
+          {/* Controls: Play/Pause, Voice Toggle & Reset */}
+          <div className="flex items-center justify-between pt-1 gap-2">
             <button
               onClick={togglePlay}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-semibold transition-colors"
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-semibold transition-colors"
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current text-amber-400" /> : <Play className="w-3.5 h-3.5 fill-current text-green-400" />}
-              <span>{isPlaying ? "Pause Timeline" : "Play 10s Timeline"}</span>
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5 fill-current text-amber-400" />
+              ) : (
+                <Play className="w-3.5 h-3.5 fill-current text-green-400" />
+              )}
+              <span>{isPlaying ? "Pause" : "Play 10s Preview"}</span>
+            </button>
+
+            <button
+              onClick={toggleVoice}
+              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-colors ${
+                isVoiceEnabled
+                  ? "bg-rose-950/60 text-rose-300 border-rose-500/40 hover:bg-rose-900/60"
+                  : "bg-neutral-800 text-neutral-400 border-neutral-700 hover:text-white"
+              }`}
+              title={isVoiceEnabled ? "Voice narration enabled (plays on timeline start)" : "Voice muted"}
+            >
+              {isVoiceEnabled ? (
+                <Volume2 className="w-3.5 h-3.5 text-rose-400" />
+              ) : (
+                <VolumeX className="w-3.5 h-3.5 text-neutral-400" />
+              )}
+              <span className="text-[11px]">{isVoiceEnabled ? "Voice ON" : "Voice OFF"}</span>
             </button>
 
             <button
@@ -310,6 +383,17 @@ export function ShortPlayerMockup({ short, onOpenDetails }: ShortPlayerMockupPro
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
+          </div>
+
+          {/* Audio Timing Fit Verification Meter */}
+          <div className="p-2 rounded-xl bg-neutral-950/80 border border-neutral-800 flex items-center justify-between text-[10px]">
+            <div className="flex items-center gap-1 text-emerald-400 font-mono font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Audio: {audioTiming.totalEstimatedDuration}s / 10s</span>
+            </div>
+            <span className="text-[9px] text-neutral-400 font-mono">
+              Setup: {audioTiming.estimatedSetupDuration}s • Payoff: {audioTiming.estimatedPunchlineDuration}s
+            </span>
           </div>
 
         </div>

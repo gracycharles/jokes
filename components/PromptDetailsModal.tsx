@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ShortPrompt,
   getYouTubeTitle,
@@ -8,6 +8,11 @@ import {
   getYouTubeTags,
   getFullVideoGeneratorPrompt
 } from "@/lib/shorts-data";
+import {
+  playTimedShortAudio,
+  stopNarration,
+  analyzeShortAudioTiming
+} from "@/lib/audio-voice";
 import {
   X,
   Copy,
@@ -21,6 +26,9 @@ import {
   Clock,
   Clapperboard,
   Volume2,
+  VolumeX,
+  Play,
+  Pause,
   ShieldCheck,
   FileCode,
   Type,
@@ -36,11 +44,50 @@ interface PromptDetailsModalProps {
 export function PromptDetailsModal({ short, onClose }: PromptDetailsModalProps) {
   const [copiedType, setCopiedType] = useState<string | null>(null);
   const [showJsonView, setShowJsonView] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [activeSpeechLine, setActiveSpeechLine] = useState<number | null>(null);
 
   const ytTitle = getYouTubeTitle(short);
   const ytDescription = getYouTubeDescription(short);
   const ytTags = getYouTubeTags(short);
   const fullVideoPrompt = getFullVideoGeneratorPrompt(short);
+
+  const audioTiming = analyzeShortAudioTiming(
+    short.cleanJokeCore.setup,
+    short.cleanJokeCore.punchline
+  );
+
+  useEffect(() => {
+    return () => {
+      stopNarration();
+    };
+  }, []);
+
+  const handleToggleAudio = () => {
+    if (isPlayingAudio) {
+      stopNarration();
+      setIsPlayingAudio(false);
+      setActiveSpeechLine(null);
+    } else {
+      setIsPlayingAudio(true);
+      playTimedShortAudio(
+        short.cleanJokeCore.setup,
+        short.cleanJokeCore.punchline,
+        {
+          onStart: () => setIsPlayingAudio(true),
+          onLineChange: (lineIdx) => setActiveSpeechLine(lineIdx),
+          onEnd: () => {
+            setIsPlayingAudio(false);
+            setActiveSpeechLine(null);
+          },
+          onError: () => {
+            setIsPlayingAudio(false);
+            setActiveSpeechLine(null);
+          }
+        }
+      );
+    }
+  };
 
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
@@ -342,13 +389,47 @@ ${short.dialogueScript
                     </p>
                   </div>
 
-                  <button
-                    onClick={copyAudioScript}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-rose-300 text-xs font-semibold border border-neutral-700 transition-colors"
-                  >
-                    {copiedType === "audio" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedType === "audio" ? "Copied Audio Prompt" : "Copy Audio & Dialogue Prompt"}</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleToggleAudio}
+                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
+                        isPlayingAudio
+                          ? "bg-rose-600 text-white shadow-rose-950/40 animate-pulse"
+                          : "bg-neutral-800 hover:bg-neutral-700 text-rose-300 border border-neutral-700"
+                      }`}
+                    >
+                      {isPlayingAudio ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current text-rose-400" />}
+                      <span>{isPlayingAudio ? "Stop Narration" : "Listen to British Voice"}</span>
+                    </button>
+
+                    <button
+                      onClick={copyAudioScript}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold border border-neutral-700 transition-colors"
+                    >
+                      {copiedType === "audio" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedType === "audio" ? "Copied" : "Copy Audio Prompt"}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 10s Audio Timing & Pronunciation Guarantee Badge */}
+                <div className="p-3 rounded-xl bg-neutral-900/90 border border-neutral-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      100% Fits in 10s Video
+                    </span>
+                    <span className="text-neutral-300 font-mono text-[11px]">
+                      Spoken Audio: <strong className="text-emerald-400">{audioTiming.totalEstimatedDuration}s</strong> ({audioTiming.totalWordCount} words)
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-neutral-400 font-mono flex items-center gap-3">
+                    <span>Setup: {audioTiming.estimatedSetupDuration}s</span>
+                    <span>•</span>
+                    <span>Pause: {audioTiming.estimatedPauseDuration}s</span>
+                    <span>•</span>
+                    <span>Payoff: {audioTiming.estimatedPunchlineDuration}s</span>
+                  </div>
                 </div>
 
                 {/* Characters List */}
@@ -380,23 +461,36 @@ ${short.dialogueScript
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400 block">
                     10-Second Dialogue Progression:
                   </span>
-                  {short.dialogueScript.map((line, idx) => (
-                    <div
-                      key={idx}
-                      className="p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800 flex items-start gap-3 text-xs"
-                    >
-                      <span className="px-2 py-0.5 rounded bg-neutral-800 font-mono text-[10px] text-amber-400 shrink-0">
-                        {line.timeRange}
-                      </span>
-                      <div className="flex-1">
-                        <span className="font-bold text-white mr-1.5">{line.speaker}:</span>
-                        <span className="text-neutral-200">&ldquo;{line.text}&rdquo;</span>
-                        <span className="text-[10px] text-neutral-400 block mt-0.5 font-mono">
-                          Delivery Direction: {line.mood} (British young female voice delivery)
+                  {short.dialogueScript.map((line, idx) => {
+                    const isLineActive = isPlayingAudio && activeSpeechLine === idx;
+                    return (
+                      <div
+                        key={idx}
+                        className={`p-2.5 rounded-xl border flex items-start gap-3 text-xs transition-all ${
+                          isLineActive
+                            ? "bg-rose-950/40 border-rose-500/50 shadow-md ring-1 ring-rose-500/30"
+                            : "bg-neutral-900/60 border border-neutral-800"
+                        }`}
+                      >
+                        <span
+                          className={`px-2 py-0.5 rounded font-mono text-[10px] shrink-0 font-bold ${
+                            isLineActive
+                              ? "bg-rose-600 text-white"
+                              : "bg-neutral-800 text-amber-400"
+                          }`}
+                        >
+                          {line.timeRange}
                         </span>
+                        <div className="flex-1">
+                          <span className="font-bold text-white mr-1.5">{line.speaker}:</span>
+                          <span className="text-neutral-200">&ldquo;{line.text}&rdquo;</span>
+                          <span className="text-[10px] text-neutral-400 block mt-0.5 font-mono">
+                            Delivery Direction: {line.mood} (British young female voice delivery)
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

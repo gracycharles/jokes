@@ -9,6 +9,11 @@ import {
   getFullVideoGeneratorPrompt
 } from "@/lib/shorts-data";
 import {
+  playTimedShortAudio,
+  stopNarration,
+  analyzeShortAudioTiming
+} from "@/lib/audio-voice";
+import {
   Copy,
   Check,
   Film,
@@ -17,6 +22,9 @@ import {
   Sun,
   Clock,
   Volume2,
+  VolumeX,
+  Play,
+  Pause,
   Tag,
   FileText,
   Type,
@@ -37,11 +45,36 @@ interface ShortCardProps {
 export function ShortCard({ short, isSelected, onSelect, onOpenDetails }: ShortCardProps) {
   const [copiedField, setCopiedField] = useState<"prompt" | "title" | "desc" | "tags" | "all" | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   const ytTitle = getYouTubeTitle(short);
   const ytDescription = getYouTubeDescription(short);
   const ytTags = getYouTubeTags(short);
   const fullVideoPrompt = getFullVideoGeneratorPrompt(short);
+
+  const audioTiming = analyzeShortAudioTiming(
+    short.cleanJokeCore.setup,
+    short.cleanJokeCore.punchline
+  );
+
+  const handleToggleAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isPlayingAudio) {
+      stopNarration();
+      setIsPlayingAudio(false);
+    } else {
+      setIsPlayingAudio(true);
+      playTimedShortAudio(
+        short.cleanJokeCore.setup,
+        short.cleanJokeCore.punchline,
+        {
+          onStart: () => setIsPlayingAudio(true),
+          onEnd: () => setIsPlayingAudio(false),
+          onError: () => setIsPlayingAudio(false)
+        }
+      );
+    }
+  };
 
   const copyText = (text: string, field: "prompt" | "title" | "desc" | "tags" | "all", e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -341,13 +374,38 @@ ${fullVideoPrompt}
               <p className="text-neutral-300 text-[11px] leading-relaxed">{short.lighting}</p>
             </div>
 
-            <div className="p-3 rounded-xl bg-neutral-950/70 border border-neutral-800 space-y-1">
-              <span className="text-rose-400 font-bold font-mono text-[10px] flex items-center gap-1 uppercase">
-                <Volume2 className="w-3.5 h-3.5" /> British Voice Dialogue
-              </span>
+            <div className="p-3 rounded-xl bg-neutral-950/70 border border-neutral-800 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-rose-400 font-bold font-mono text-[10px] flex items-center gap-1 uppercase">
+                  <Volume2 className="w-3.5 h-3.5" /> British Voice
+                </span>
+                <span className="text-[9px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                  {audioTiming.totalEstimatedDuration}s / 10s
+                </span>
+              </div>
               <p className="text-neutral-300 text-[11px] leading-relaxed">
-                British young female voice delivery with {short.dialogueScript.length} time-coded lines.
+                British young female voice delivery ({audioTiming.totalWordCount} words, calibrated for 10s).
               </p>
+              <button
+                onClick={handleToggleAudio}
+                className={`w-full mt-1 flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  isPlayingAudio
+                    ? "bg-rose-600 text-white animate-pulse"
+                    : "bg-neutral-800 hover:bg-neutral-700 text-rose-300 border border-neutral-700"
+                }`}
+              >
+                {isPlayingAudio ? (
+                  <>
+                    <Pause className="w-3 h-3 fill-current" />
+                    <span>Stop Audio</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3 h-3 fill-current text-rose-400" />
+                    <span>Listen to Narration</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
 

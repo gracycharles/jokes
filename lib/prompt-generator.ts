@@ -35,19 +35,19 @@ export function generateShortPromptClient({
         vocalPerformanceNotes: "Crisp Oxford cadence with cheerful, well-timed punchline delivery.",
       },
     ],
-    cameraAngle: "0-3s: Low-angle dramatic push-in. 3-7s: Dynamic 9:16 vertical sweep. 7-10s: Wide cinematic golden hour hero reveal.",
-    lighting: "Hollywood anamorphic rim lighting with warm key light and subtle volumetric particles.",
-    visualStorytellingPrompt: `Vertical 9:16 cinematic scene. 0-3s: Close-up on ${cleanTopic} under dramatic spotlight. 3-7s: Particle light expands in 9:16 frame. 7-10s: Hero reveal with golden light. Photorealistic 8k render, 10s duration for Runway Gen-3 / Sora.`,
+    cameraAngle: `[CONTINUOUS 10S TAKE] 0.0s-3.5s: Smooth low-angle push-in establishing ${cleanTopic} in unbroken 9:16 framing. 3.5s-6.5s: Seamless tracking sweep following the action. 6.5s-10.0s: Golden hour pedestal tilt locking onto the punchline payoff.`,
+    lighting: "Hollywood anamorphic rim lighting with warm key light, uniform shadow continuity, and subtle volumetric particles.",
+    visualStorytellingPrompt: `[UNBROKEN 10-SECOND SINGLE TAKE - 9:16 VERTICAL] 0.0s-3.5s: In a continuous medium frame, establish Lady Penelope and ${cleanTopic} under dramatic cinematic lighting. 3.5s-6.5s: Without cutting or scene jumping, camera smoothly glides closer as ${cleanTopic} turns into a burst of golden cinematic confetti in slow motion. 6.5s-10.0s: In the same unbroken scene space, Lady Penelope delivers the triumphant punchline with charming comedic timing. Photorealistic 8K render, 100% subject persistence, zero jump cuts.`,
     dialogueScript: [
       {
         speaker: "Lady Penelope",
-        timeRange: "0:00 - 0:04",
+        timeRange: "0:00 - 0:03.5",
         text: `Why did the ${cleanTopic.toLowerCase()} take a 10-second pause?`,
         mood: "Intrigued British whisper",
       },
       {
         speaker: "Lady Penelope",
-        timeRange: "0:04 - 0:10",
+        timeRange: "0:04.5 - 0:10.0",
         text: "Because timing is everything when making everyone smile!",
         mood: "Cheerful triumphant British punchline",
       },
@@ -59,7 +59,7 @@ export function generateShortPromptClient({
       safeZonePosition: "Upper safe zone (Y: 20% to 40% margin, avoiding bottom YouTube Shorts caption area)",
       styleGuide: "Neutral charcoal matte badge, crisp high-legibility sans-serif text, gold trim.",
     },
-    generatorCopyPrompt: `Vertical 9:16 Hollywood cinematic YouTube Short. ${fallbackTitle}. Anamorphic lens, volumetric lighting, rich color grading. Character delivers clean comedic punchline with physical visual metaphor. Photorealistic 10s video prompt for modern AI video generators.`,
+    generatorCopyPrompt: `[CONTINUOUS SINGLE-TAKE 10s 9:16 CINEMATIC SHOT — ZERO JUMP CUTS, HIGH TEMPORAL STABILITY] Establishing ${fallbackTitle} in rich ${genre} cinematography. 0.0s-3.5s: Lady Penelope grounded in setting with setup dialogue. 3.5s-6.5s: Smooth unbroken tracking motion as golden confetti particles expand. 6.5s-10.0s: Direct physical comedic punchline payoff with consistent character identity, uniform lighting, and sharp focus. Masterful 8K photorealistic render for Runway Gen-3 / Sora / Kling / Luma.`,
     hdImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1080&auto=format&fit=crop",
     tags: Array.from(
       new Set([
