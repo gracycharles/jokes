@@ -43,13 +43,18 @@ export interface ShortPrompt {
 
 export const DEFAULT_SCOTTISH_TAGS: string[] = [
   "Glasgow",
+  "Edinburgh",
   "Scotland",
   "United Kingdom",
   "UK",
+  "glasgow",
+  "edinburgh",
+  "scotland",
+  "united kingdom",
+  "uk",
   "Glasgow Scotland",
-  "United Kingdom UK",
-  "Edinburgh",
   "Edinburgh Scotland",
+  "United Kingdom UK",
   "Scotland Facts",
   "Glasgow History",
   "Edinburgh Facts",
@@ -62,11 +67,17 @@ export const DEFAULT_SCOTTISH_TAGS: string[] = [
 
 export const DEFAULT_SCOTTISH_HASHTAGS: string[] = [
   "#Glasgow",
+  "#Edinburgh",
   "#Scotland",
   "#UnitedKingdom",
   "#UK",
+  "#glasgow",
+  "#edinburgh",
+  "#scotland",
+  "#unitedkingdom",
+  "#uk",
   "#GlasgowScotland",
-  "#Edinburgh",
+  "#EdinburghScotland",
   "#Shorts",
   "#ScottishHistory"
 ];
@@ -111,7 +122,7 @@ export function getYouTubeTags(short: ShortPrompt): string {
   const seen = new Set<string>();
   const uniqueTags: string[] = [];
   for (const tag of combined) {
-    const key = tag.toLowerCase().trim();
+    const key = tag.trim();
     if (key && !seen.has(key)) {
       seen.add(key);
       uniqueTags.push(tag.trim());
@@ -1191,7 +1202,7 @@ SHORTS_DATABASE.forEach((short) => {
   const combined = [...DEFAULT_SCOTTISH_TAGS, ...short.tags];
   const seen = new Set<string>();
   short.tags = combined.filter((t) => {
-    const k = t.toLowerCase().trim();
+    const k = t.trim();
     if (!k || seen.has(k)) return false;
     seen.add(k);
     return true;
