@@ -6,6 +6,7 @@ import { ShortCard } from "@/components/ShortCard";
 import { PromptDetailsModal } from "@/components/PromptDetailsModal";
 import { GeneratorModal } from "@/components/GeneratorModal";
 import { BatchExportModal } from "@/components/BatchExportModal";
+import { BottomNavOverlay } from "@/components/BottomNavOverlay";
 import { WakeLockAndFullscreen } from "@/components/WakeLockAndFullscreen";
 import {
   Search,
@@ -238,6 +239,9 @@ export default function HomePage() {
           </p>
         </div>
       </footer>
+
+      {/* Bottom Quick Navigation & Move-To-Top Overlay */}
+      <BottomNavOverlay shorts={filteredShorts} />
 
       {/* Modals */}
       {inspectingShort && (
