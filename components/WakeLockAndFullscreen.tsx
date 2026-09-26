@@ -9,18 +9,19 @@ export function WakeLockAndFullscreen() {
 
   // Request Wake Lock
   const requestWakeLock = useCallback(async () => {
-    if ("wakeLock" in navigator) {
-      try {
-        const sentinel = await (navigator as any).wakeLock.request("screen");
-        setIsWakeLocked(true);
+    if (typeof window === "undefined" || typeof navigator === "undefined" || !("wakeLock" in navigator)) {
+      return;
+    }
+    try {
+      const sentinel = await (navigator as any).wakeLock.request("screen");
+      setIsWakeLocked(true);
 
-        sentinel.addEventListener("release", () => {
-          setIsWakeLocked(false);
-        });
-      } catch (err: any) {
-        console.warn("Wake Lock error:", err);
+      sentinel.addEventListener("release", () => {
         setIsWakeLocked(false);
-      }
+      });
+    } catch (err: any) {
+      console.warn("Wake Lock error:", err);
+      setIsWakeLocked(false);
     }
   }, []);
 
@@ -65,6 +66,7 @@ export function WakeLockAndFullscreen() {
   }, []);
 
   const toggleFullscreen = async () => {
+    if (typeof document === "undefined") return;
     try {
       if (!document.fullscreenElement) {
         await document.documentElement.requestFullscreen();

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment>
+  <target>github-pages</target>
+  <provider>GitHub Actions</provider>
+  <framework>Next.js 15 (App Router Static Export)</framework>
+  <outputDirectory>out</outputDirectory>
+  <workflow>.github/workflows/deploy.yml</workflow>
+  <buildScript>npm run build</buildScript>
+  <environment>
+    <variable name="GITHUB_PAGES">true</variable>
+    <variable name="BASE_PATH">${{ steps.configure-pages.outputs.base_path || '' }}</variable>
+  </environment>
+</deployment>

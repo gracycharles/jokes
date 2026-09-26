@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { ShortPrompt } from "@/lib/shorts-data";
 import { X, Sparkles, Loader2, Plus, Film, Volume2, Check, Copy } from "lucide-react";
 
+import { generateShortPromptClient } from "@/lib/prompt-generator";
+
 interface GeneratorModalProps {
   onClose: () => void;
   onAddShort: (newShort: ShortPrompt) => void;
@@ -35,20 +37,37 @@ export function GeneratorModal({ onClose, onAddShort }: GeneratorModalProps) {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/generate-prompt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      // Try API route if available, otherwise fallback immediately to client generator
+      let shortData: ShortPrompt | null = null;
+      try {
+        const res = await fetch("/api/generate-prompt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: topic || "Unexpected Everyday Phenomenon",
+            genre,
+            characterCount
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.data) {
+            shortData = data.data;
+          }
+        }
+      } catch (e) {
+        // Fetch failed (e.g. static site on GitHub Pages)
+      }
+
+      if (!shortData) {
+        shortData = generateShortPromptClient({
           topic: topic || "Unexpected Everyday Phenomenon",
           genre,
           characterCount
-        })
-      });
-
-      const data = await res.json();
-      if (data.success && data.data) {
-        setGeneratedResult(data.data);
+        });
       }
+
+      setGeneratedResult(shortData);
     } catch (err) {
       console.error("Failed to generate:", err);
     } finally {
