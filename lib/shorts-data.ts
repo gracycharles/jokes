@@ -41,20 +41,52 @@ export interface ShortPrompt {
   tags: string[];
 }
 
+export const DEFAULT_SCOTTISH_TAGS: string[] = [
+  "Glasgow",
+  "Scotland",
+  "United Kingdom",
+  "UK",
+  "Glasgow Scotland",
+  "United Kingdom UK",
+  "Edinburgh",
+  "Edinburgh Scotland",
+  "Scotland Facts",
+  "Glasgow History",
+  "Edinburgh Facts",
+  "Visit Scotland",
+  "Scottish Humour",
+  "Scottish Nostalgia",
+  "Scottish History",
+  "Shorts"
+];
+
+export const DEFAULT_SCOTTISH_HASHTAGS: string[] = [
+  "#Glasgow",
+  "#Scotland",
+  "#UnitedKingdom",
+  "#UK",
+  "#GlasgowScotland",
+  "#Edinburgh",
+  "#Shorts",
+  "#ScottishHistory"
+];
+
 export function getYouTubeTitle(short: ShortPrompt): string {
   const cleanTitle = short.title.replace(/^The\s+/i, "");
   return `${cleanTitle}! 🎬😂 #Shorts`;
 }
 
 export function getYouTubeDescription(short: ShortPrompt): string {
-  const tagsList = [
-    "#Shorts",
-    "#Comedy",
+  const categoryHashtag = "#" + short.category.replace(/[^a-zA-Z0-9]/g, "");
+  const hashtagSet = new Set([
+    ...DEFAULT_SCOTTISH_HASHTAGS,
+    categoryHashtag,
+    "#ScottishHumour",
+    "#ScottishNostalgia",
     "#CleanJokes",
-    "#" + short.category.replace(/[^a-zA-Z0-9]/g, ""),
-    "#Animation",
-    "#FunnyShorts"
-  ].join(" ");
+    "#Comedy"
+  ]);
+  const tagsList = Array.from(hashtagSet).join(" ");
 
   return `${short.cleanJokeCore.setup}
 ${short.cleanJokeCore.punchline}
@@ -70,19 +102,21 @@ ${tagsList}`;
 }
 
 export function getYouTubeTags(short: ShortPrompt): string {
-  const baseTags = [
-    "shorts",
-    "youtube shorts",
-    "clean jokes",
-    "comedy",
-    "funny shorts",
-    "10s short",
-    "humor",
-    "british voice",
-    short.category.toLowerCase(),
-    ...short.tags.map((t) => t.toLowerCase())
+  const combined = [
+    ...DEFAULT_SCOTTISH_TAGS,
+    short.category,
+    ...short.tags
   ];
-  const uniqueTags = Array.from(new Set(baseTags));
+
+  const seen = new Set<string>();
+  const uniqueTags: string[] = [];
+  for (const tag of combined) {
+    const key = tag.toLowerCase().trim();
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      uniqueTags.push(tag.trim());
+    }
+  }
   return uniqueTags.join(", ");
 }
 
@@ -1143,5 +1177,17 @@ EXTENDED_JOKES_LIST.forEach((tmpl, idx) => {
     generatorCopyPrompt: `Vertical 9:16 Hollywood cinematic video. 10 seconds. ${tmpl.title}. Camera moves dynamically in 10s runtime. ${tmpl.metaphor}. Masterful lighting, rich atmospheric textures, hyper-detailed render for Runway Gen-3 / Sora / Kling / Luma.`,
     hdImage: "",
     tags: tmpl.tags
+  });
+});
+
+// Post-process all shorts so that every fact leads with DEFAULT_SCOTTISH_TAGS
+SHORTS_DATABASE.forEach((short) => {
+  const combined = [...DEFAULT_SCOTTISH_TAGS, ...short.tags];
+  const seen = new Set<string>();
+  short.tags = combined.filter((t) => {
+    const k = t.toLowerCase().trim();
+    if (!k || seen.has(k)) return false;
+    seen.add(k);
+    return true;
   });
 });

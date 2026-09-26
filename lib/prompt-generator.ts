@@ -1,4 +1,4 @@
-import { ShortPrompt } from "./shorts-data";
+import { ShortPrompt, DEFAULT_SCOTTISH_TAGS } from "./shorts-data";
 
 export interface GeneratePromptParams {
   topic?: string;
@@ -61,6 +61,14 @@ export function generateShortPromptClient({
     },
     generatorCopyPrompt: `Vertical 9:16 Hollywood cinematic YouTube Short. ${fallbackTitle}. Anamorphic lens, volumetric lighting, rich color grading. Character delivers clean comedic punchline with physical visual metaphor. Photorealistic 10s video prompt for modern AI video generators.`,
     hdImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1080&auto=format&fit=crop",
-    tags: [cleanTopic, "Comedy", "Hollywood", "Clean Joke", "Shorts"],
+    tags: Array.from(
+      new Set([
+        ...DEFAULT_SCOTTISH_TAGS,
+        cleanTopic,
+        "Comedy",
+        "Hollywood",
+        "Clean Joke"
+      ])
+    ),
   };
 }
